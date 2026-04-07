@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+
+# Environment Variables
+.env
+
+# Flask
+instance/
+.webassets-cache
+
+# Logs
+*.log
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Models / Data (optional)
+models/*.pkl
+data/*.csv
