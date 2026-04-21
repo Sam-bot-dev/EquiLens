@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>EquiLens</title>
+</head>
+<body>
+
+    <h1>🚀 EquiLens - AI Fairness Auditor</h1>
+
+    <form id="uploadForm">
+        <input type="file" name="file" required><br><br>
+
+        Target Column:
+        <input type="text" name="target" value="approved"><br><br>
+
+        Sensitive Column:
+        <input type="text" name="sensitive" value="gender"><br><br>
+
+        <button type="submit">Analyze</button>
+    </form>
+
+    <h2>Results:</h2>
+    <pre id="result"></pre>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            const res = await fetch('/analyze', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await res.json();
+
+            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
+        });
+    </script>
+
+</body>
+</html>
