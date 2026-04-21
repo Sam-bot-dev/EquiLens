@@ -19,6 +19,7 @@
         rel="stylesheet" />
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
@@ -139,13 +140,13 @@
                         and provides actionable mitigation strategies.</p>
                 </div>
                 <div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-12 text-center hover:bg-surface-container-low transition-colors group cursor-pointer"
-                    onclick="document.getElementById('fileInput').click()">
+                    onclick="document.getElementById('fileInput').click()" id="uploadBox">
                     <div class="flex flex-col items-center gap-4">
-                        <span
+                        <span id="uploadIcon"
                             class="material-symbols-outlined text-5xl text-primary/40 group-hover:text-primary transition-colors">cloud_upload</span>
                         <div class="space-y-1">
-                            <p class="font-semibold text-lg">Drag and drop your file here</p>
-                            <p class="text-sm text-on-surface-variant">CSV, JSON, or Parquet up to 50MB</p>
+                            <p id="uploadText" class="font-semibold text-lg">Drag and drop your file here</p>
+                            <p id="uploadSubtext" class="text-sm text-on-surface-variant">CSV, JSON, or Parquet up to 50MB</p>
                         </div>
                     </div>
                     <input type="file" id="fileInput" hidden>
@@ -258,61 +259,13 @@
             <div class="glass-card rounded-xl p-8 space-y-6">
                 <h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Outcome by
                     Group</h3>
-                <div class="space-y-6 pt-4">
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm font-semibold">
-                            <span>Group A</span>
-                            <span>78%</span>
-                        </div>
-                        <div class="w-full bg-surface-container rounded-full h-6 overflow-hidden">
-                            <div class="bg-primary h-full rounded-full" style="width: 78%"></div>
-                        </div>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex justify-between text-sm font-semibold">
-                            <span>Group B</span>
-                            <span>64%</span>
-                        </div>
-                        <div class="w-full bg-surface-container rounded-full h-6 overflow-hidden">
-                            <div class="bg-secondary-container h-full rounded-full" style="width: 64%"></div>
-                        </div>
-                    </div>
-                </div>
+                    <canvas id="groupChart" class="mt-4"></canvas>
             </div>
             <!-- Feature Importance Card -->
             <div class="md:col-span-2 glass-card rounded-xl p-8 space-y-6">
                 <h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Top Feature
                     Contributors to Bias</h3>
-                <div class="space-y-4">
-                    <div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
-                        <span class="text-xs font-bold text-on-surface-variant">Zip Code</span>
-                        <div class="w-full bg-surface-container rounded-full h-2">
-                            <div id="credit-score-bar" class="bg-tertiary h-2 rounded-full" style="width: 75%"></div>
-                        </div>
-                        <span class="text-xs font-bold">0.42</span>
-                    </div>
-                    <div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
-                        <span class="text-xs font-bold text-on-surface-variant">Annual Income</span>
-                        <div class="w-full bg-surface-container rounded-full h-2">
-                            <div class="bg-tertiary/60 h-2 rounded-full" style="width: 60%"></div>
-                        </div>
-                        <span class="text-xs font-bold">0.28</span>
-                    </div>
-                    <div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
-                        <span class="text-xs font-bold text-on-surface-variant">Education</span>
-                        <div class="w-full bg-surface-container rounded-full h-2">
-                            <div id="education-bar" class="bg-tertiary/40 h-2 rounded-full" style="width: 35%"></div>
-                        </div>
-                        <span class="text-xs font-bold">0.14</span>
-                    </div>
-                    <div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
-                        <span class="text-xs font-bold text-on-surface-variant">Age</span>
-                        <div class="w-full bg-surface-container rounded-full h-2">
-                            <div id="age-bar" class="bg-tertiary/20 h-2 rounded-full" style="width: 15%"></div>
-                        </div>
-                        <span class="text-xs font-bold">0.05</span>
-                    </div>
-                </div>
+                <canvas id="featureChart" class="mt-4"></canvas>
             </div>
             <!-- Recommendations Card -->
             <div class="md:col-span-3 glass-card rounded-xl p-8 space-y-6">
@@ -360,6 +313,21 @@
         <div class="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-tertiary/5 rounded-full blur-[120px]"></div>
     </div>
     <script>
+        let groupChart = null;
+        let featureChart = null;
+
+        // Handle file selection display
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            if (this.files.length > 0) {
+                const fileName = this.files[0].name;
+                document.getElementById('uploadText').textContent = `✓ File selected: ${fileName}`;
+                document.getElementById('uploadSubtext').textContent = `Size: ${(this.files[0].size / 1024 / 1024).toFixed(2)} MB`;
+                document.getElementById('uploadIcon').textContent = 'check_circle';
+                document.getElementById('uploadBox').style.borderColor = '#3c4ccf';
+                document.getElementById('uploadBox').style.backgroundColor = 'rgba(60, 76, 207, 0.05)';
+            }
+        });
+
         function runAnalysis() {
             const fileInput = document.getElementById('fileInput');
             const target = document.getElementById('target').value;
@@ -379,14 +347,26 @@
             formData.append('target', target);
             formData.append('sensitive', sensitive);
 
+            // Add loading state
+            document.body.style.opacity = "0.5";
+
             fetch('/analyze', {
                 method: 'POST',
                 body: formData
             })
                 .then(response => response.json())
                 .then(data => {
-                    // Update UI elements
-                    document.getElementById('summary-text').innerHTML = data.summary;
+                    // Remove loading state
+                    document.body.style.opacity = "1";
+
+                    // Error check
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    // Update UI elements - Safe with textContent for summary
+                    document.getElementById('summary-text').textContent = data.summary;
                     document.getElementById('bias-score').textContent = data.bias.bias_score;
                     document.getElementById('dp-value').textContent = data.fairness.demographic_parity_difference;
                     document.getElementById('di-value').textContent = data.fairness.disparate_impact_ratio;
@@ -397,31 +377,87 @@
                         text += `${key}: ${groups[key]}<br>`;
                     }
 
-                    document.getElementById('group-rates-text').innerHTML = text;
-
-                    // Update feature importance bars
-                    if (data.feature_importance) {
-                        const features = Object.keys(data.feature_importance);
-                        const bars = ['credit-score-bar', 'education-bar', 'age-bar'];
-
-                        let i = 0;
-                        for (let feature in data.feature_importance) {
-                            if (bars[i]) {
-                                let bar = document.getElementById(bars[i]);
-                                let value = data.feature_importance[feature];
-
-                                bar.style.width = (value * 100) + "%";
-                                bar.parentElement.nextElementSibling.textContent = value.toFixed(2);
-                            }
-                            i++;
+                    // Auto highlight worst group
+                    let minGroup = null;
+                    let minValue = Infinity;
+                    for (let key in groups) {
+                        if (groups[key] < minValue) {
+                            minValue = groups[key];
+                            minGroup = key;
                         }
-                        features.forEach((feature, index) => {
-                            if (bars[index]) {
-                                const bar = document.getElementById(bars[index]);
-                                const value = data.feature_importance[feature];
-                                bar.style.width = (value * 100) + '%';
-                                // Update the span text as well
-                                bar.parentElement.nextElementSibling.textContent = value.toFixed(2);
+                    }
+
+                    document.getElementById('group-rates-text').innerHTML = text + 
+                        `<br><strong style="color:#ba1a1a;">Most affected: ${minGroup}</strong>`;
+
+                    // Destroy old charts safely
+                    if (groupChart !== null) {
+                        groupChart.destroy();
+                    }
+                    if (featureChart !== null) {
+                        featureChart.destroy();
+                    }
+
+                    // Create Group Comparison Chart
+                    const labels = Object.keys(groups);
+                    const values = Object.values(groups).map(v => v * 100);
+
+                    const ctxGroup = document.getElementById('groupChart').getContext('2d');
+
+                    groupChart = new Chart(ctxGroup, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Approval Rate (%)',
+                                data: values,
+                                backgroundColor: 'rgba(60, 76, 207, 0.8)'
+                            }]
+                        },
+                        options: {
+                            animation: {
+                                duration: 800
+                            },
+                            scales: {
+                                y: { beginAtZero: true, max: 100 }
+                            },
+                            plugins: { legend: { display: false } }
+                        }
+                    });
+
+                    // Create Feature Importance Chart
+                    if (data.feature_importance) {
+                        const ctxFeature = document.getElementById('featureChart').getContext('2d');
+                        const features = Object.keys(data.feature_importance);
+                        const featureValues = Object.values(data.feature_importance);
+                        featureChart = new Chart(ctxFeature, {
+                            type: 'bar',
+                            data: {
+                                labels: features,
+                                datasets: [{
+                                    label: 'Importance',
+                                    data: featureValues,
+                                    backgroundColor: 'rgba(87, 103, 233, 0.8)',
+                                    borderColor: 'rgba(87, 103, 233, 1)',
+                                    borderWidth: 1
+                                }]
+                            },
+                            options: {
+                                animation: {
+                                    duration: 800
+                                },
+                                indexAxis: 'y',
+                                responsive: true,
+                                scales: {
+                                    x: {
+                                        beginAtZero: true
+                                    }
+                                },
+                                plugins: {
+                                    legend: {
+                                        display: false
+                                    }
+                                }
                             }
                         });
                     }
@@ -433,12 +469,15 @@
                             if (recCards[index]) {
                                 const h4 = recCards[index].querySelector('h4');
                                 const p = recCards[index].querySelector('p');
+                                h4.textContent = "Suggestion";
                                 p.textContent = rec;
                             }
                         });
                     }
                 })
                 .catch(error => {
+                    // Remove loading state
+                    document.body.style.opacity = "1";
                     console.error('Error:', error);
                     alert('An error occurred during analysis.');
                 });
