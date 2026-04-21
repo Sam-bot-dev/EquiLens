@@ -18,6 +18,10 @@ def home():
 def analyze():
     try:
         file = request.files['file']
+
+        if not file:
+            return jsonify({"error": "No file uploaded"})
+
         df = pd.read_csv(file)
 
         target_column = request.form.get("target", "approved")
@@ -26,17 +30,24 @@ def analyze():
         # Bias Detection
         bias_result = calculate_bias(df, target_column, sensitive_column)
 
+        if "error" in bias_result:
+            return jsonify({"error": bias_result["error"]})
+
         # Fairness Metrics
         fairness_result = fairness_summary(df, target_column, sensitive_column)
 
-        # Encode categorical (simple)
+        # Encode ALL categorical columns
         df_encoded = df.copy()
-        df_encoded[sensitive_column] = df_encoded[sensitive_column].astype('category').cat.codes
+        for col in df_encoded.select_dtypes(include=['object']).columns:
+            df_encoded[col] = df_encoded[col].astype('category').cat.codes
 
-        # Explainability
+        # Explainability (SAFE MODE)
         model, X = train_model(df_encoded, target_column)
-        shap_values = shap_explain(model, X)
-        importance = get_feature_importance(shap_values, X)
+
+        X_sample = X.sample(min(100, len(X)))
+        shap_values = shap_explain(model, X_sample)
+
+        importance = get_feature_importance(shap_values, X_sample)
         importance = {k: round(v, 3) for k, v in importance.items()}
 
         # Recommendations
@@ -56,7 +67,9 @@ def analyze():
 
     except Exception as e:
         return jsonify({"error": str(e)})
-
+@app.route('/dashboard')
+def dashboard():
+    return render_template('dashboard.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

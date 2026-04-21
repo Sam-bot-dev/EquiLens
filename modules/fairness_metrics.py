@@ -1,60 +1,42 @@
 import pandas as pd
 
-def demographic_parity(df, target_column, sensitive_column):
-    """
-    Calculates demographic parity difference
-    """
-
-    groups = df[sensitive_column].unique()
+def compute_group_rates(df, target_column, sensitive_column):
     rates = {}
 
-    for group in groups:
+    for group in df[sensitive_column].unique():
         group_data = df[df[sensitive_column] == group]
+
+        if len(group_data) == 0:
+            continue
+
         rates[group] = group_data[target_column].mean()
 
-    max_rate = max(rates.values())
-    min_rate = min(rates.values())
-
-    dp_diff = max_rate - min_rate
-
-    return round(dp_diff, 3), rates
-
-
-def disparate_impact(df, target_column, sensitive_column):
-    """
-    Calculates disparate impact ratio
-    """
-
-    groups = df[sensitive_column].unique()
-    rates = {}
-
-    for group in groups:
-        group_data = df[df[sensitive_column] == group]
-        rates[group] = group_data[target_column].mean()
-
-    max_rate = max(rates.values())
-    min_rate = min(rates.values())
-
-    if max_rate == 0:
-        return 0, rates
-
-    di_ratio = min_rate / max_rate
-
-    return round(di_ratio, 3), rates
+    return {str(k): float(v) for k, v in rates.items()}
 
 
 def fairness_summary(df, target_column, sensitive_column):
-    """
-    Combines all fairness metrics
-    """
+    
+    if target_column not in df.columns or sensitive_column not in df.columns:
+        return {"error": "Invalid column names"}
 
-    dp, dp_rates = demographic_parity(df, target_column, sensitive_column)
-    di, di_rates = disparate_impact(df, target_column, sensitive_column)
+    rates = compute_group_rates(df, target_column, sensitive_column)
+
+    if not rates:
+        return {"error": "No valid groups"}
+
+    values = list(rates.values())
+
+    dp = round(max(values) - min(values), 3)
+
+    if max(values) == 0:
+        di = 0
+    else:
+        di = round(min(values) / max(values), 3)
 
     summary = {
-    "demographic_parity_difference": float(dp),
-    "disparate_impact_ratio": float(di),
-    "group_rates": {k: float(v) for k, v in dp_rates.items()}
+        "demographic_parity_difference": float(dp),
+        "disparate_impact_ratio": float(di),
+        "group_rates": rates
     }
 
     # Interpretation

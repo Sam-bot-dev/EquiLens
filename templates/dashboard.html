@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EquiLense Dashboard</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "surface-container": "#eceef3",
+                    "surface-container-highest": "#e1e2e8",
+                    "surface-variant": "#e1e2e8",
+                    "surface-dim": "#d8dae0",
+                    "outline": "#757686",
+                    "primary-container": "#5767e9",
+                    "secondary-container": "#d7e3fa",
+                    "surface-tint": "#3f4fd1",
+                    "surface-container-low": "#f2f3f9",
+                    "on-secondary-fixed-variant": "#3c475a",
+                    "tertiary-fixed": "#e3dfff",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#574fad",
+                    "surface-container-high": "#e7e8ee",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "on-primary-fixed": "#000a64",
+                    "on-tertiary-fixed": "#140067",
+                    "on-surface": "#191c20",
+                    "secondary": "#535f72",
+                    "inverse-primary": "#bcc2ff",
+                    "primary-fixed": "#dfe0ff",
+                    "surface-bright": "#f8f9ff",
+                    "primary-fixed-dim": "#bcc2ff",
+                    "primary": "#3c4ccf",
+                    "on-primary-container": "#fffbff",
+                    "tertiary-container": "#7069c7",
+                    "inverse-surface": "#2e3135",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed-dim": "#c5c0ff",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#413996",
+                    "on-background": "#191c20",
+                    "on-secondary-container": "#596578",
+                    "on-surface-variant": "#454654",
+                    "secondary-fixed-dim": "#bbc7dd",
+                    "on-tertiary-container": "#fffbff",
+                    "on-primary-fixed-variant": "#2233b9",
+                    "on-secondary-fixed": "#101c2c",
+                    "inverse-on-surface": "#eff0f6",
+                    "background": "#f8f9ff",
+                    "outline-variant": "#c5c5d6",
+                    "secondary-fixed": "#d7e3fa"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Manrope"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed min-h-screen">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(31,38,135,0.07)] h-16">
+<div class="flex justify-between items-center h-full px-8 max-w-[1920px] mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-slate-900 font-headline">EquiLense</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-blue-600 border-b-2 border-blue-600/50 pb-1 font-headline font-medium tracking-tight" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-slate-900 transition-all duration-300 font-headline font-medium tracking-tight" href="#">History</a>
+<a class="text-slate-500 hover:text-slate-900 transition-all duration-300 font-headline font-medium tracking-tight" href="#">Settings</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-inverse-surface text-inverse-on-surface px-6 py-2 rounded-xl font-headline font-semibold text-sm transition-transform active:scale-95">Run Analysis</button>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant p-2 cursor-pointer hover:bg-surface-container rounded-full transition-colors">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant p-2 cursor-pointer hover:bg-surface-container rounded-full transition-colors">account_circle</span>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-16 px-8 max-w-[1440px] mx-auto space-y-8">
+<!-- Input Section -->
+<section class="max-w-4xl mx-auto">
+<div class="glass-card rounded-xl p-8 shadow-[0_20px_50px_rgba(0,0,0,0.05)] flex flex-col gap-8">
+<div class="text-center space-y-2">
+<h1 class="text-3xl font-headline font-bold tracking-tight">Upload Dataset</h1>
+<p class="text-on-surface-variant max-w-lg mx-auto">EquiLense scans your data for algorithmic bias and provides actionable mitigation strategies.</p>
+</div>
+<div class="border-2 border-dashed border-outline-variant/50 rounded-xl p-12 text-center hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="flex flex-col items-center gap-4">
+<span class="material-symbols-outlined text-5xl text-primary/40 group-hover:text-primary transition-colors">cloud_upload</span>
+<div class="space-y-1">
+<p class="font-semibold text-lg">Drag and drop your file here</p>
+<p class="text-sm text-on-surface-variant">CSV, JSON, or Parquet up to 50MB</p>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-wider px-1">Target Column</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="e.g. loan_approval" type="text"/>
+</div>
+<div class="space-y-2">
+<label class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-wider px-1">Sensitive Column</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary/20 transition-all outline-none" placeholder="e.g. gender, age, ethnicity" type="text"/>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-4 rounded-xl font-headline font-bold text-lg shadow-[0_8px_20px_rgba(60,76,207,0.3)] hover:translate-y-[-2px] transition-all">
+                    Run Fairness Analysis
+                </button>
+</div>
+</section>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Summary Card -->
+<div class="md:col-span-3 glass-card rounded-xl p-8 border-l-4 border-primary">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+<div class="space-y-2">
+<h2 class="text-xl font-headline font-bold">AI Insight Summary</h2>
+<p class="text-on-surface-variant leading-relaxed">Our analysis detected a <strong>14.2% disparity</strong> in the <span class="text-primary font-semibold">loan_approval</span> outcomes between defined subgroups. The model shows significant reliance on <span class="text-primary font-semibold">zip_code</span>, which may be acting as a proxy for protected attributes. Immediate review of feature weighting is recommended to align with compliance standards.</p>
+</div>
+</div>
+</div>
+<!-- Bias Score Card -->
+<div class="glass-card rounded-xl p-8 flex flex-col justify-between items-center text-center space-y-4">
+<span class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Global Bias Score</span>
+<div class="relative">
+<span class="text-7xl font-headline font-extrabold text-on-surface tracking-tighter">68</span>
+<span class="text-on-surface-variant font-medium">/100</span>
+</div>
+<span class="bg-error-container text-on-error-container px-6 py-1 rounded-full font-bold text-xs">High Bias Detected</span>
+</div>
+<!-- Fairness Metrics Card -->
+<div class="glass-card rounded-xl p-8 space-y-6">
+<h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Core Metrics</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<div>
+<p class="font-bold">Demographic Parity</p>
+<p class="text-xs text-on-surface-variant">Difference in selection rates</p>
+</div>
+<span class="text-xl font-headline font-bold text-error">0.18</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5">
+<div class="bg-error h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+<div class="flex justify-between items-center">
+<div>
+<p class="font-bold">Disparate Impact</p>
+<p class="text-xs text-on-surface-variant">Ratio of selection rates</p>
+</div>
+<span class="text-xl font-headline font-bold text-primary">0.82</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 82%"></div>
+</div>
+</div>
+</div>
+<!-- Bias Explanation Panel -->
+<div class="glass-card rounded-xl p-8 space-y-4 bg-tertiary/5">
+<h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Bias Origin Analysis</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-tertiary">error_outline</span>
+<p class="text-sm leading-relaxed">
+<span class="font-bold text-tertiary">Group X (Minority)</span> has a significantly lower approval rate (32%) compared to the global average (46%).
+                        </p>
+</div>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-tertiary">info</span>
+<p class="text-sm leading-relaxed">
+                            The model penalizes entries with <span class="italic">shorter credit history</span> more heavily for this subgroup.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Group Comparison Card -->
+<div class="glass-card rounded-xl p-8 space-y-6">
+<h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Outcome by Group</h3>
+<div class="space-y-6 pt-4">
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Group A</span>
+<span>78%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-6 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 78%"></div>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-sm font-semibold">
+<span>Group B</span>
+<span>64%</span>
+</div>
+<div class="w-full bg-surface-container rounded-full h-6 overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full" style="width: 64%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Feature Importance Card -->
+<div class="md:col-span-2 glass-card rounded-xl p-8 space-y-6">
+<h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Top Feature Contributors to Bias</h3>
+<div class="space-y-4">
+<div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant">Zip Code</span>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-tertiary h-2 rounded-full" style="width: 85%"></div>
+</div>
+<span class="text-xs font-bold">0.42</span>
+</div>
+<div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant">Annual Income</span>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-tertiary/60 h-2 rounded-full" style="width: 60%"></div>
+</div>
+<span class="text-xs font-bold">0.28</span>
+</div>
+<div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant">Education</span>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-tertiary/40 h-2 rounded-full" style="width: 35%"></div>
+</div>
+<span class="text-xs font-bold">0.14</span>
+</div>
+<div class="grid grid-cols-[120px_1fr_40px] items-center gap-4">
+<span class="text-xs font-bold text-on-surface-variant">Age</span>
+<div class="w-full bg-surface-container rounded-full h-2">
+<div class="bg-tertiary/20 h-2 rounded-full" style="width: 15%"></div>
+</div>
+<span class="text-xs font-bold">0.05</span>
+</div>
+</div>
+</div>
+<!-- Recommendations Card -->
+<div class="md:col-span-3 glass-card rounded-xl p-8 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-label font-bold text-on-surface-variant uppercase tracking-widest">Mitigation Recommendations</h3>
+<span class="text-xs text-primary font-bold bg-primary-fixed px-3 py-1 rounded-full">3 Suggested Actions</span>
+</div>
+<div class="grid md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl space-y-3 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">data_object</span>
+</div>
+<h4 class="font-bold">Resampling</h4>
+<p class="text-sm text-on-surface-variant">Oversample underrepresented classes in the training set to balance outcomes.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-3 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">tune</span>
+</div>
+<h4 class="font-bold">Reweighing</h4>
+<p class="text-sm text-on-surface-variant">Apply weights to training examples to ensure group fairness before processing.</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-3 hover:bg-surface-container-high transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-full bg-on-surface/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface">shield</span>
+</div>
+<h4 class="font-bold">Post-processing</h4>
+<p class="text-sm text-on-surface-variant">Adjust classification thresholds for specific subgroups to reach parity.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Background Decorative Elements -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+<div class="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 bg-primary/5 rounded-full blur-[120px]"></div>
+<div class="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-tertiary/5 rounded-full blur-[120px]"></div>
+</div>
+</body></html>

@@ -1,45 +1,270 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>EquiLens</title>
+<meta charset="UTF-8">
+<title>EquiLense</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(180deg, #f8f9ff, #eef1ff);
+    color: #1a1a1a;
+    overflow-x: hidden;
+}
+
+/* NAVBAR */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 80px;
+}
+
+nav h2 {
+    font-weight: 600;
+}
+
+nav ul {
+    display: flex;
+    gap: 30px;
+    list-style: none;
+    align-items: center;
+}
+
+nav ul li {
+    cursor: pointer;
+    color: #555;
+}
+
+.cta {
+    background: linear-gradient(135deg, #6c7cff, #8fa3ff);
+    padding: 10px 18px;
+    border-radius: 20px;
+    color: white;
+}
+
+/* HERO */
+.hero {
+    text-align: center;
+    margin-top: 80px;
+    position: relative;
+}
+
+/* BIG GLOW ARC */
+.hero::before {
+    content: "";
+    position: absolute;
+    top: -220px;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    width: 1300px;
+    height: 800px;
+
+    background: radial-gradient(
+        circle at center,
+        rgba(120, 140, 255, 0.5),
+        rgba(150, 120, 255, 0.35),
+        rgba(255, 255, 255, 0.2),
+        transparent 70%
+    );
+
+    filter: blur(140px);
+    z-index: -2;
+}
+
+/* FLOATING LIGHT */
+.floating-light {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(140,160,255,0.4), transparent);
+    filter: blur(100px);
+    top: 100px;
+    left: 20%;
+    animation: float 8s ease-in-out infinite;
+    z-index: -1;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-40px); }
+}
+
+/* BADGE */
+.badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: #6c7cff;
+    margin-bottom: 20px;
+}
+
+/* TITLE */
+.hero h1 {
+    font-size: 54px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.hero h1 span {
+    color: #6c7cff;
+}
+
+/* SUBTEXT */
+.hero p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #555;
+}
+
+/* BUTTONS */
+.buttons {
+    margin-top: 30px;
+}
+
+.buttons button {
+    padding: 12px 26px;
+    border-radius: 25px;
+    border: none;
+    margin: 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* PRIMARY BUTTON */
+.primary {
+    background: linear-gradient(135deg, #6c7cff, #8fa3ff);
+    color: white;
+    box-shadow: 0 5px 20px rgba(108,124,255,0.3);
+}
+
+/* SECONDARY BUTTON (GLASS) */
+.secondary {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #333;
+}
+
+/* FEATURES */
+.features {
+    margin: 80px auto;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+/* GLASS CARDS */
+.card {
+    flex: 1;
+    padding: 25px;
+    border-radius: 20px;
+
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+
+    transition: 0.3s ease;
+}
+
+/* HOVER EFFECT */
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* CARD TEXT */
+.card h3 {
+    margin-bottom: 10px;
+}
+
+.card p {
+    font-size: 14px;
+    color: #555;
+}
+</style>
 </head>
+
 <body>
 
-    <h1>🚀 EquiLens - AI Fairness Auditor</h1>
+<!-- NAVBAR -->
+<nav>
+    <h2>EquiLense</h2>
+    <ul>
+        <li>Features</li>
+        <li>Docs</li>
+        <li>About</li>
+        <li class="cta">Get Started →</li>
+    </ul>
+</nav>
 
-    <form id="uploadForm">
-        <input type="file" name="file" required><br><br>
+<!-- HERO -->
+<div class="hero">
 
-        Target Column:
-        <input type="text" name="target" value="approved"><br><br>
+    <div class="floating-light"></div>
 
-        Sensitive Column:
-        <input type="text" name="sensitive" value="gender"><br><br>
+    <div class="badge">✨ AI FAIRNESS. TRANSPARENCY. TRUST.</div>
 
-        <button type="submit">Analyze</button>
-    </form>
+    <h1>
+        See <span>AI</span> Decisions Clearly.<br>
+        Ensure <span>Fairness</span> Everywhere.
+    </h1>
 
-    <h2>Results:</h2>
-    <pre id="result"></pre>
+    <p>
+        EquiLense helps you detect bias, analyze fairness,
+        and build responsible AI systems with confidence.
+    </p>
 
-    <script>
-        const form = document.getElementById('uploadForm');
+    <div class="buttons">
+        <button class="primary" onclick="window.location.href='/dashboard'">Start Analyzing →</button>
+        <button class="secondary">Watch Demo</button>
+    </div>
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
+</div>
 
-            const formData = new FormData(form);
+<!-- FEATURES -->
+<div class="features">
 
-            const res = await fetch('/analyze', {
-                method: 'POST',
-                body: formData
-            });
+    <div class="card">
+        <h3>Bias Detection</h3>
+        <p>Identify bias in datasets and model predictions.</p>
+    </div>
 
-            const data = await res.json();
+    <div class="card">
+        <h3>Fairness Metrics</h3>
+        <p>Comprehensive fairness metrics & visual insights.</p>
+    </div>
 
-            document.getElementById('result').textContent = JSON.stringify(data, null, 2);
-        });
-    </script>
+    <div class="card">
+        <h3>Explainability</h3>
+        <p>Understand model behavior with powerful explanations.</p>
+    </div>
+
+    <div class="card">
+        <h3>Actionable Insights</h3>
+        <p>Get smart recommendations to improve fairness.</p>
+    </div>
+
+</div>
 
 </body>
 </html>
